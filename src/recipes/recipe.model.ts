@@ -26,7 +26,7 @@ export class Recipe extends Model<Recipe> {
     type: DataType.STRING,
     allowNull: false,
   })
-  ingredients: string[];
+  ingredients: string;
 
   @Column({
     type: DataType.STRING,

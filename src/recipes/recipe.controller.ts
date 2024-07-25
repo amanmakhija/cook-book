@@ -1,14 +1,24 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Get, Delete, Param, Body, Query } from '@nestjs/common';
+import { Controller, Post, Get, Delete, Param, Body, Query, Request, UnauthorizedException } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
 import { Recipe } from './recipe.model';
+import { JwtStrategy } from 'src/auth/jwt.strategy';
 
 @Controller('recipes')
 export class RecipeController {
-  constructor(private readonly recipeService: RecipeService) { }
+  constructor(private readonly recipeService: RecipeService, private readonly jwtStrategy: JwtStrategy) { }
 
   @Post()
-  create(@Body() body: Partial<Recipe>) {
+  async create(@Request() req, @Body() body: Partial<Recipe>) {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    const user = await this.jwtStrategy.validateToken(token);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    body.postedBy = user.id.toString();
     return this.recipeService.create(body);
   }
 
@@ -18,17 +28,41 @@ export class RecipeController {
   }
 
   @Get('name')
-  findByName(@Query('name') name: string) {
+  async findByName(@Request() req, @Query('name') name: string) {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    const user = await this.jwtStrategy.validateToken(token);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
     return this.recipeService.findByName(name);
   }
 
   @Get(':id')
-  findById(@Param('id') id: number) {
+  async findById(@Request() req, @Param('id') id: number) {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    const user = await this.jwtStrategy.validateToken(token);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
     return this.recipeService.findById(id);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: number) {
-    return this.recipeService.delete(id);
+  async delete(@Request() req, @Param('id') id: number) {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    const user = await this.jwtStrategy.validateToken(token);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    return this.recipeService.delete(user, id);
   }
 }

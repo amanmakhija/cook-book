@@ -36,10 +36,10 @@ export class User extends Model<User> {
   profilePicture: string;
 
   @Column({
-    type: DataType.ARRAY(DataType.STRING),
-    defaultValue: [],
+    type: DataType.STRING,
+    defaultValue: '',
   })
-  favouriteRecipes: string[];
+  favouriteRecipes: string;
 
   @Column({
     type: DataType.DATE,
