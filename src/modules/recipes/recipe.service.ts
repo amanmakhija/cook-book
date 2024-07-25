@@ -1,13 +1,11 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
-import { Recipe } from './recipe.model';
-import { User } from 'src/users/user.model';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Recipe } from '../../schemas/recipe.model';
 
 @Injectable()
 export class RecipeService {
   constructor(
-    @InjectModel(Recipe)
+    @Inject('Recipe_Repository')
     private readonly recipeModel: typeof Recipe,
   ) { }
 
@@ -27,17 +25,10 @@ export class RecipeService {
     return this.recipeModel.findAll({ where: { name } });
   }
 
-  async delete(user: User, id: number): Promise<object> {
+  async delete(id: number): Promise<object> {
     const recipe = await this.recipeModel.findByPk(id);
-    if (!recipe) {
-      throw new NotFoundException();
-    }
-    if (parseInt(recipe.postedBy) !== user.id) {
-      throw new UnauthorizedException();
-    }
-    if (recipe) {
-      await recipe.destroy();
-    }
+    if (!recipe) throw new NotFoundException();
+    if (recipe) await recipe.destroy();
     return { message: 'Recipe deleted successfully' };
   }
 }

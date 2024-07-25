@@ -6,43 +6,45 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../users/user.service';
-import { User } from '../users/user.model';
+import { RegisterUserDto } from './dto/register.dto';
+import { UserDto } from './dto/user.dto';
+import { LoginUserDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
-  async register(
-    email: string,
-    name: string,
-    password: string,
-    profilePicture?: string,
-  ): Promise<{ user: User; access_token: string }> {
-    const userExists = await this.userService.findUser(email);
+  async register(registerUserDto: RegisterUserDto): Promise<UserDto> {
+    const userExists = await this.userService.findUser(registerUserDto.email);
     if (userExists) {
       throw new ConflictException('User already exists');
     }
-    const user = await this.userService.register(email, name, password, profilePicture);
+    const user = await this.userService.register(registerUserDto);
     const payload = { email: user.email, sub: user.id };
     const access_token = this.jwtService.sign(payload);
 
-    return { user, access_token };
+    const userDto = new UserDto();
+    userDto.user = user;
+    userDto.token = access_token;
+
+    return userDto;
   }
 
-  async login(
-    email: string,
-    password: string,
-  ): Promise<{ user: User; access_token: string }> {
-    const user = await this.userService.validateUser(email, password);
+  async login(loginUserDto: LoginUserDto): Promise<UserDto> {
+    const user = await this.userService.validateUser(loginUserDto);
     if (!user) {
       throw new NotFoundException('Invalid credentials');
     }
     const payload = { email: user.email, sub: user.id };
     const access_token = this.jwtService.sign(payload);
 
-    return { user, access_token };
+    const userDto = new UserDto();
+    userDto.user = user;
+    userDto.token = access_token;
+
+    return userDto;
   }
 }
