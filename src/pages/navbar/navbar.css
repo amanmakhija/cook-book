@@ -1,0 +1,80 @@
+.navbar {
+    position: fixed;
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar-hero {
+    cursor: pointer;
+    font-size: 2rem;
+}
+
+.navbar div {
+    width: 40%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.navbar div div {
+    position: relative;
+    display: flex;
+    width: 60%;
+}
+
+.navbar-options {
+    display: flex;
+    justify-content: space-between;
+    width: 15%;
+    gap: 2vw;
+}
+
+.navbar-options li {
+    list-style-type: none;
+    font-size: 1.2rem;
+}
+
+.navbar-options a {
+    font-weight: 400;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.navbar-options a:hover {
+    color: #f1f1f1;
+}
+
+.navbar div div input {
+    position: absolute;
+    right: 0;
+    padding: 5px 50px 5px 10px;
+    border-radius: 5px;
+    border: none;
+    width: 60%;
+    height: 30px;
+    font-size: 1rem;
+}
+
+.navbar div div button {
+    right: 0;
+    position: absolute;
+    padding: 1vh .5vw;
+    border-radius: 0 5px 5px 0;
+    border: 1px solid transparent;
+    background-color: transparent;
+    color: #333;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.navbar div div button:hover {
+    background-color: #f1f1f1;
+    border-left: 1px solid #333;
+}
