@@ -30,8 +30,8 @@
 .navbar-options {
     display: flex;
     justify-content: space-between;
-    width: 15%;
     gap: 2vw;
+    margin-right: -5vw;
 }
 
 .navbar-options li {

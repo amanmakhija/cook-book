@@ -1,4 +1,4 @@
-.register {
+.container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -6,36 +6,36 @@
     height: 90vh;
 }
 
-.register h1 {
+.heading {
     font-size: 2rem;
     margin-bottom: 20px;
 }
 
-.register form {
+.form {
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 30%;
 }
 
-.register form div {
+.form div {
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
-.register form div label {
+.form div label {
     text-align: start;
     font-size: 1.2rem;
 }
 
-.register form div input {
+.form div input {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
 }
 
-.register form div button {
+.submit-btn {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid transparent;
@@ -45,24 +45,15 @@
     cursor: pointer;
 }
 
-.register form div button:hover {
+.submit-btn {
     background-color: #555;
 }
 
-.register form div button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-.register form div button:disabled:hover {
-    background-color: #ccc;
-}
-
-.register p {
+.container p {
     font-size: 1.2rem;
 }
 
-.register p span {
+.container p span {
     color: #333;
     font-weight: 700;
     cursor: pointer;
@@ -70,81 +61,6 @@
     transition: all 0.3s;
 }
 
-.register p span:hover {
-    color: #555;
-}
-
-.login {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 90vh;
-}
-
-.login h1 {
-    font-size: 1.2rem;
-}
-
-.login form {
-    display: flex;
-    gap: 10px;
-    flex-direction: column;
-    width: 30%;
-}
-
-.login form div {
-    display: flex;
-    gap: 10px;
-    flex-direction: column;
-}
-
-.login form div label {
-    font-size: 1rem;
-    text-align: start;
-}
-
-.login form div input {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-.login form div button {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid transparent;
-    background-color: #333;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-.login form div button:hover {
-    background-color: #555;
-}
-
-.login form div button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-.login form div button:disabled:hover {
-    background-color: #ccc;
-}
-
-.login p {
-    font-size: 1.2rem;
-}
-
-.login p span {
-    color: #333;
-    font-weight: 700;
-    cursor: pointer;
-    text-decoration: underline;
-    transition: all 0.3s;
-}
-
-.login p span:hover {
+.container p span:hover {
     color: #555;
 }

@@ -12,12 +12,8 @@ export default function Card({ recipe }) {
             <div className='card-thumbnail' style={{ background: `url('${recipe.thumbnail}')` }}></div>
             <div className='card-details'>
                 <h1>{recipe.name}</h1>
-                <p>{recipe.instructions}</p>
-                <ul>
-                    {recipe.ingredients.map((i, index) => (
-                        index === recipe.ingredients.length - 1 ? <li key={index}>{i}</li> : <li key={index}>{i},</li>
-                    ))}
-                </ul>
+                <p>{recipe.description}</p>
+                <span>{recipe.ingredients}</span>
             </div>
         </div>
     )

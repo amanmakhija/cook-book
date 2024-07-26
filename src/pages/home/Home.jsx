@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import axios from 'axios'
 import Card from '../../components/card/Card'
 import './home.css'
+import { useQuery } from '@tanstack/react-query'
+import Loading from '../../components/loading/Loading'
+import { toast } from 'react-toastify'
+
+const fetchRecipes = async () => {
+    try {
+        const { data } = await axios.get('http://localhost:3000/recipes')
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 export default function Home() {
-    const [recipes, setRecipes] = useState([])
+    const { data, error, isLoading } = useQuery({ queryKey: ['recipes'], queryFn: fetchRecipes })
 
-    const getData = async () => {
-        try {
-            const response = await axios.get('http://localhost:5000/api/recipes')
-            const { data } = response
-            setRecipes(data)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    useEffect(() => {
-        getData()
-    }, [])
-
+    if (isLoading) return <Loading />
+    if (error) toast.error(error.message)
 
     return (
         <div className='home'>
-            {recipes.map(recipe => (
-                <Card key={recipe._id} recipe={recipe} />
+            {data.map(recipe => (
+                <Card key={recipe.id} recipe={recipe} />
             ))}
         </div>
     )
