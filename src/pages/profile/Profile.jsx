@@ -40,8 +40,16 @@ export default function Profile() {
 
     if (isLoading) return <Loading />
 
+    const logout = (e) => {
+        e.preventDefault()
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        navigate('/')
+    }
+
     return (
         <div className='profile'>
+            <button onClick={(e) => logout(e)} className='logout-btn'>Logout</button>
             <div className='user-img' style={{ backgroundImage: `url(${data.profilePicture})` }}></div>
             <div className='user-info'>
                 <div>

@@ -31,18 +31,18 @@ export default function Card({ recipe }) {
         addToFavouriteMutation.mutate();
     };
 
-    const { id, favouriteRecipes } = JSON.parse(localStorage.getItem('user'));
+    const { id, favouriteRecipes } = JSON.parse(localStorage.getItem('user') || '{}');
 
     return (
-        <div className={recipe.postedBy.includes(id) ? 'owner card' : 'card'}>
+        <div className={(id && recipe.postedBy.includes(id)) ? 'owner card' : 'card'}>
             <span className='my-recipe'>My Recipe</span>
             <div onClick={openRecipe} className='card-thumbnail' style={{ backgroundImage: `url(${recipe.thumbnail})` }}></div>
             <div onClick={openRecipe} className='card-details'>
                 <h1>{recipe.name}</h1>
-                <p>{recipe.description}</p>
+                <p dangerouslySetInnerHTML={{ __html: recipe.description }}></p>
                 <span>{recipe.ingredients}</span>
             </div>
-            <div onClick={handleFavourite} className='heart'>{favouriteRecipes.includes(recipe.id) ? <i className="fa-solid fa-heart red"></i> : <i className="fa-regular fa-heart"></i>}</div>
+            <div onClick={handleFavourite} className='heart'>{(id && favouriteRecipes.includes(recipe.id)) ? <i className="fa-solid fa-heart red"></i> : <i className="fa-regular fa-heart"></i>}</div>
         </div>
     )
 }

@@ -58,19 +58,18 @@ export default function Register() {
         onSuccess: (data) => {
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
+            navigate('/');
         }
     });
 
     const handleRegister = (e) => {
         e.preventDefault();
         registerMutation.mutate();
-        navigate('/');
     };
 
     const handleLogin = (e) => {
         e.preventDefault();
         loginMutation.mutate();
-        navigate('/');
     };
 
     return (
