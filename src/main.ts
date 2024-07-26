@@ -8,6 +8,7 @@ async function bootstrap() {
   // const sequelize = app.get(Sequelize);
 
   // await sequelize.sync({ force: false });
+  app.enableCors()
   await app.listen(3000);
 }
 bootstrap();
