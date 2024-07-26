@@ -30,7 +30,7 @@ export class AuthController {
 
   @Put('update')
   @UseGuards(JwtAuthGuard)
-  async updateProfile(@Request() req, @Body() updateUserDto: UpdateUserDto ) {
+  async updateProfile(@Request() req, @Body() updateUserDto: UpdateUserDto) {
     return await this.userService.updateUser(req.user.email, updateUserDto);
   }
 }

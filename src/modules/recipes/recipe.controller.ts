@@ -10,6 +10,7 @@ export class RecipeController {
   constructor(private readonly recipeService: RecipeService, private readonly jwtStrategy: JwtStrategy) { }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   async create(@Request() req, @Body() recipe: Partial<Recipe>) {
     recipe.postedBy = req.user.id.toString();
     return this.recipeService.create(recipe);
@@ -38,7 +39,8 @@ export class RecipeController {
   @Delete(':id')
   async delete(@Request() req, @Param('id') id: number) {
     if (!req.user) throw new UnauthorizedException();
-    if (req.user.id !== id) throw new UnauthorizedException();
+    console.log(typeof req.user.id, typeof id);
+    if (req.user.id != id) throw new UnauthorizedException();
     return this.recipeService.delete(id);
   }
 }

@@ -23,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
                     secret: process.env.JWT_SECRET
                 }
             );
-            request['user'] = payload;
+            request['user'] = await this.userService.findUser(payload.email);
         } catch {
             throw new UnauthorizedException();
         }
