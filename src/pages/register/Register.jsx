@@ -57,7 +57,7 @@ export default function Register() {
         },
         onSuccess: (data) => {
             localStorage.setItem('token', data.token);
-            localStorage.setItem('name', JSON.stringify(data.user.name));
+            localStorage.setItem('user', JSON.stringify(data.user));
         }
     });
 

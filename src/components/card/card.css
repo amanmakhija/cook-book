@@ -1,4 +1,5 @@
 .card {
+    position: relative;
     width: 15vw;
     height: 100%;
     display: flex;
@@ -12,13 +13,42 @@
     cursor: pointer;
 }
 
+.heart {
+    position: absolute;
+    color: #333;
+    right: 1vw;
+    bottom: 9vh;
+    font-size: 1.5rem;
+}
+
+.my-recipe {
+    position: absolute;
+    color: #333;
+    background-color: #fff;
+    padding: 5px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    font-size: 1rem;
+    right: .1vw;
+    bottom: .1vh;
+    display: none;
+}
+
+.owner .my-recipe {
+    display: block;
+}
+
+.red {
+    color: red;
+}
+
 .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
 .card-thumbnail {
-    height: 200px;
+    height: 20vh;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

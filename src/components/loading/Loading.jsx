@@ -3,6 +3,11 @@ import './loading.css'
 
 export default function Loading() {
     return (
-        <div>Loading</div>
+        <div className='loading'>
+            <div className='loading-container'>
+                <div className='loading-spinner'></div>
+                <h1>Loading...</h1>
+            </div>
+        </div>
     )
 }

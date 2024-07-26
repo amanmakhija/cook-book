@@ -5,18 +5,24 @@ import './home.css'
 import { useQuery } from '@tanstack/react-query'
 import Loading from '../../components/loading/Loading'
 import { toast } from 'react-toastify'
+import { useParams } from 'react-router-dom'
 
-const fetchRecipes = async () => {
+const fetchRecipes = async ({ queryKey }) => {
     try {
-        const { data } = await axios.get('http://localhost:3000/recipes')
+        const [_, name] = queryKey
+        const query = 'http://localhost:3000/recipes'
+        name && query.concat(`/name?name=${name}`)
+        console.log(query);
+        const { data } = await axios.get(query)
         return data
     } catch (error) {
-        console.log(error)
+        toast.error(`${error.response.data.message} (${error.response.status})`)
     }
 }
 
 export default function Home() {
-    const { data, error, isLoading } = useQuery({ queryKey: ['recipes'], queryFn: fetchRecipes })
+    const { name } = useParams()
+    const { data, error, isLoading } = useQuery({ queryKey: ['recipes', name], queryFn: fetchRecipes })
 
     if (isLoading) return <Loading />
     if (error) toast.error(error.message)

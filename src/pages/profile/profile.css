@@ -1,0 +1,36 @@
+.profile {
+    padding: 20vh 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    gap: 10vh;
+}
+
+.user-img {
+    width: 20vh;
+    height: 20vh;
+    border-radius: 50%;
+    background-repeat: repeat;
+    background-size: contain;
+    background-position: center;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    cursor: pointer;
+}
+
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    gap: 20px;
+}
+
+.user-info div {
+    display: flex;
+    align-items: center;
+    gap: 2vw;
+}

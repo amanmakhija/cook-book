@@ -5,24 +5,29 @@ import { useState } from 'react'
 
 export default function Navbar() {
     const navigate = useNavigate()
-    const [name, setName] = useState("")
+    const [user, setUser] = useState({})
+    const [searchValue, setSearchValue] = useState('')
 
     useEffect(() => {
-        setName(localStorage.getItem('name').replace(/['"]+/g, ''))
+        setUser(JSON.parse(localStorage.getItem('user')))
     }, [])
+
+    const search = (e) => {
+        e.preventDefault()
+        navigate(`/search/${searchValue}`)
+    }
 
     return (
         <nav className='navbar'>
             <h1 onClick={() => navigate('/')} className='navbar-hero'>CookBook</h1>
             <div>
                 <div>
-                    <input type='text' placeholder='Search by Name / Ingredient' className='navbar-search' />
-                    <button className='navbar-search-btn'><i className="fa-solid fa-magnifying-glass"></i></button>
+                    <input value={searchValue} onChange={(e) => setSearchValue(e.target.value)} type='text' placeholder='Search by Name / Ingredient' className='navbar-search' />
+                    <button onClick={(e) => search(e)} className='navbar-search-btn'><i className="fa-solid fa-magnifying-glass"></i></button>
                 </div>
                 <ul className='navbar-options'>
-                    <li>{name !== "" && <a href='/post-recipe'>Post</a>}</li>
-                    <li>{name !== "" && <a href='/profile'>Profile</a>}</li>
-                    <li>{name !== "" ? <a href='/profile'>Hi, {name}</a> : <a href='/register'>Register</a>}</li>
+                    <li>{user && <a href='/post-recipe'>Post</a>}</li>
+                    <li>{user ? <a href='/profile'>Hi, {user.name}</a> : <a href='/register'>Register</a>}</li>
                 </ul>
             </div>
         </nav>
