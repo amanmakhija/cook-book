@@ -21,10 +21,8 @@ export class RecipeController {
     return this.recipeService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('name')
-  async findByName(@Request() req, @Query('name') name: string) {
-    if (!req.user) throw new UnauthorizedException();
+  async findByName(@Query('name') name: string) {
     return this.recipeService.findByName(name);
   }
 
