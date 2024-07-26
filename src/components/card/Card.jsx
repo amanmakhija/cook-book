@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 export default function Card({ recipe }) {
     const navigate = useNavigate()
     const openRecipe = () => {
-        navigate(`/recipe/${recipe._id}`)
+        navigate(`/recipe/${recipe.id}`)
     }
     return (
         <div onClick={openRecipe} className='card'>

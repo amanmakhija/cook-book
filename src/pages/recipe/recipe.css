@@ -1,0 +1,54 @@
+.recipe {
+    min-height: 80vh;
+    width: 80%;
+    padding: 20vh 0;
+    display: flex;
+    justify-content: center;
+    gap: 10vw;
+    margin: 0 auto;
+}
+
+.recipe-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5vh;
+    align-items: start;
+    flex-direction: column;
+    min-height: 80vh;
+    width: 40%;
+}
+
+.recipe-img {
+    height: 35vh;
+    width: 30vw;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 10px;
+}
+
+.recipe-container span {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    text-transform: capitalize;
+    font-weight: 700;
+}
+
+.recipe-info {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+}
+
+.recipe-info h1 {
+    text-transform: capitalize;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.recipe-info p {
+    text-transform: capitalize;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}

@@ -20,8 +20,8 @@ export default function Navbar() {
                     <button className='navbar-search-btn'><i className="fa-solid fa-magnifying-glass"></i></button>
                 </div>
                 <ul className='navbar-options'>
-                    <li><a href='/post-recipe'>Post</a></li>
-                    <li><a href='/profile'>Profile</a></li>
+                    <li>{name !== "" && <a href='/post-recipe'>Post</a>}</li>
+                    <li>{name !== "" && <a href='/profile'>Profile</a>}</li>
                     <li>{name !== "" ? <a href='/profile'>Hi, {name}</a> : <a href='/register'>Register</a>}</li>
                 </ul>
             </div>
