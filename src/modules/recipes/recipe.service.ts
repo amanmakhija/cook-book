@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Recipe } from '../../schemas/recipe.model';
 
 @Injectable()
@@ -25,9 +25,10 @@ export class RecipeService {
     return this.recipeModel.findAll({ where: { name } });
   }
 
-  async delete(id: number): Promise<object> {
+  async delete(userID: number, id: number): Promise<object> {
     const recipe = await this.recipeModel.findByPk(id);
     if (!recipe) throw new NotFoundException();
+    if (userID !== parseInt(recipe.postedBy)) throw new UnauthorizedException();
     if (recipe) await recipe.destroy();
     return { message: 'Recipe deleted successfully' };
   }

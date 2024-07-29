@@ -37,8 +37,6 @@ export class RecipeController {
   @Delete(':id')
   async delete(@Request() req, @Param('id') id: number) {
     if (!req.user) throw new UnauthorizedException();
-    console.log(typeof req.user.id, typeof id);
-    if (req.user.id != id) throw new UnauthorizedException();
-    return this.recipeService.delete(id);
+    return this.recipeService.delete(req.user.id, id);
   }
 }
