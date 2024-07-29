@@ -6,7 +6,7 @@ import { useMutation, QueryClient, QueryClientProvider } from '@tanstack/react-q
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { registerValidationSchema, loginValidationSchema } from './validationSchemas'; // Adjust the path accordingly
+import { registerValidationSchema, loginValidationSchema } from '../../utils/validation';
 
 const queryClient = new QueryClient();
 
