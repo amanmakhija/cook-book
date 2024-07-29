@@ -7,7 +7,7 @@ import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import validationSchema from '../../utils/validation';
+import { recipeValidationSchema } from '../../utils/validation';
 
 export default function Post() {
     const navigate = useNavigate();
@@ -39,7 +39,7 @@ export default function Post() {
             <h1 className='title'>Create a Recipe</h1>
             <Formik
                 initialValues={{ title: '', ingredients: '' }}
-                validationSchema={validationSchema}
+                validationSchema={recipeValidationSchema}
                 onSubmit={handleSubmit}
             >
                 {({ setFieldValue }) => (

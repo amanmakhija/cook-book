@@ -16,7 +16,7 @@ export const loginValidationSchema = Yup.object({
 });
 
 
-export const validationSchema = Yup.object({
+export const recipeValidationSchema = Yup.object({
     title: Yup.string().required('Title is required'),
     instructions: Yup.string().required('Instructions are required'),
     ingredients: Yup.string().required('Ingredients are required')
