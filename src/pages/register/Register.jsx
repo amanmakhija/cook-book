@@ -4,16 +4,14 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useMutation, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { registerValidationSchema, loginValidationSchema } from './validationSchemas'; // Adjust the path accordingly
 
 const queryClient = new QueryClient();
 
 export default function Register() {
     const [isLogin, setIsLogin] = useState(false);
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
     const [profilePic, setProfilePic] = useState(null);
     const navigate = useNavigate();
 
@@ -25,15 +23,20 @@ export default function Register() {
     }, [navigate]);
 
     const registerMutation = useMutation({
-        mutationFn: async () => {
+        mutationFn: async (values) => {
             try {
-                if (password !== confirmPassword) {
-                    toast.error('Passwords do not match');
-                    return;
-                }
-                const { data } = await axios.post('http://localhost:3000/auth/register', { name, email, password });
+                const formData = new FormData();
+                formData.append('name', values.name);
+                formData.append('email', values.email);
+                formData.append('password', values.password);
+                formData.append('profilePic', profilePic);
+
+                const { data } = await axios.post('http://localhost:3000/auth/register', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
                 toast.success('Registration successful');
-                console.log(data);
                 return data;
             } catch (error) {
                 toast.error(error.response.data.message);
@@ -46,9 +49,9 @@ export default function Register() {
     });
 
     const loginMutation = useMutation({
-        mutationFn: async () => {
+        mutationFn: async (values) => {
             try {
-                const { data } = await axios.post('http://localhost:3000/auth/login', { email, password });
+                const { data } = await axios.post('http://localhost:3000/auth/login', { email: values.email, password: values.password });
                 toast.success('Login successful');
                 return data;
             } catch (error) {
@@ -62,14 +65,12 @@ export default function Register() {
         }
     });
 
-    const handleRegister = (e) => {
-        e.preventDefault();
-        registerMutation.mutate();
+    const handleRegister = (values) => {
+        registerMutation.mutate(values);
     };
 
-    const handleLogin = (e) => {
-        e.preventDefault();
-        loginMutation.mutate();
+    const handleLogin = (values) => {
+        loginMutation.mutate(values);
     };
 
     return (
@@ -77,49 +78,72 @@ export default function Register() {
             {isLogin ? (
                 <div className='container'>
                     <h1 className='heading'>Login</h1>
-                    <form className='form' onSubmit={(e) => handleLogin(e)}>
-                        <div>
-                            <label htmlFor='email'>Email</label>
-                            <input value={email} onChange={(e) => setEmail(e.target.value)} type='email' id='email' />
-                        </div>
-                        <div>
-                            <label htmlFor='password'>Password</label>
-                            <input value={password} onChange={(e) => setPassword(e.target.value)} type='password' id='password' />
-                        </div>
-                        <div>
-                            <input className='submit-btn' type='submit' value='Login' />
-                        </div>
-                    </form>
+                    <Formik
+                        initialValues={{ email: '', password: '' }}
+                        validationSchema={loginValidationSchema}
+                        onSubmit={handleLogin}
+                    >
+                        {() => (
+                            <Form className='form'>
+                                <div>
+                                    <label htmlFor='email'>Email</label>
+                                    <Field name='email' type='email' id='email' />
+                                    <ErrorMessage name='email' component='div' className='error' />
+                                </div>
+                                <div>
+                                    <label htmlFor='password'>Password</label>
+                                    <Field name='password' type='password' id='password' />
+                                    <ErrorMessage name='password' component='div' className='error' />
+                                </div>
+                                <div>
+                                    <button className='submit-btn' type='submit'>Login</button>
+                                </div>
+                            </Form>
+                        )}
+                    </Formik>
                     <p>Don't have an account? <span onClick={() => setIsLogin(!isLogin)}>Register</span></p>
                 </div>
             ) : (
                 <div className='container'>
                     <h1 className='heading'>Register</h1>
-                    <form className='form' onSubmit={(e) => handleRegister(e)}>
-                        <div>
-                            <label htmlFor='name'>Name</label>
-                            <input value={name} onChange={(e) => setName(e.target.value)} type='text' id='name' />
-                        </div>
-                        <div>
-                            <label htmlFor='email'>Email</label>
-                            <input value={email} onChange={(e) => setEmail(e.target.value)} type='email' id='email' />
-                        </div>
-                        <div>
-                            <label htmlFor='password'>Password</label>
-                            <input value={password} onChange={(e) => setPassword(e.target.value)} type='password' id='password' />
-                        </div>
-                        <div>
-                            <label htmlFor='confirm-password'>Confirm Password</label>
-                            <input value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} type='password' id='confirm-password' />
-                        </div>
-                        <div>
-                            <label htmlFor='profile-pic'>Profile Picture</label>
-                            <input value={profilePic} onChange={(e) => setProfilePic(e.target.files[0])} type='file' id='profile-pic' />
-                        </div>
-                        <div>
-                            <input className='submit-btn' type='submit' value='Register' />
-                        </div>
-                    </form>
+                    <Formik
+                        initialValues={{ name: '', email: '', password: '', confirmPassword: '' }}
+                        validationSchema={registerValidationSchema}
+                        onSubmit={handleRegister}
+                    >
+                        {({ setFieldValue }) => (
+                            <Form className='form'>
+                                <div>
+                                    <label htmlFor='name'>Name</label>
+                                    <Field name='name' type='text' id='name' />
+                                    <ErrorMessage name='name' component='div' className='error' />
+                                </div>
+                                <div>
+                                    <label htmlFor='email'>Email</label>
+                                    <Field name='email' type='email' id='email' />
+                                    <ErrorMessage name='email' component='div' className='error' />
+                                </div>
+                                <div>
+                                    <label htmlFor='password'>Password</label>
+                                    <Field name='password' type='password' id='password' />
+                                    <ErrorMessage name='password' component='div' className='error' />
+                                </div>
+                                <div>
+                                    <label htmlFor='confirm-password'>Confirm Password</label>
+                                    <Field name='confirmPassword' type='password' id='confirm-password' />
+                                    <ErrorMessage name='confirmPassword' component='div' className='error' />
+                                </div>
+                                <div>
+                                    <label htmlFor='profile-pic'>Profile Picture</label>
+                                    <input type='file' id='profile-pic' onChange={(event) => setFieldValue('profilePic', event.currentTarget.files[0])} />
+                                    <ErrorMessage name='profilePic' component='div' className='error' />
+                                </div>
+                                <div>
+                                    <button className='submit-btn' type='submit'>Register</button>
+                                </div>
+                            </Form>
+                        )}
+                    </Formik>
                     <p>Already have an account? <span onClick={() => setIsLogin(!isLogin)}>Login</span></p>
                 </div>
             )}
