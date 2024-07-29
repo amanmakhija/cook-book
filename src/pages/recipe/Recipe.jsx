@@ -51,6 +51,8 @@ export default function Recipe() {
         return <div>Error loading recipe</div>;
     }
 
+    console.log(data);
+
     const deleteRecipe = (e) => {
         e.preventDefault();
         deleteMutation.mutate();

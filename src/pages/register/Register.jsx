@@ -2,17 +2,14 @@ import React, { useEffect, useState } from 'react';
 import './register.css';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { useMutation, QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { registerValidationSchema, loginValidationSchema } from '../../utils/validation';
 
-const queryClient = new QueryClient();
 
 export default function Register() {
     const [isLogin, setIsLogin] = useState(false);
-    const [profilePic, setProfilePic] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -22,19 +19,45 @@ export default function Register() {
         }
     }, [navigate]);
 
+    const uploadProfilePic = async (profilePic, email) => {
+        try {
+            const formData = new FormData();
+            formData.append('file', profilePic);
+            formData.append('upload_preset', process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET);
+            formData.append('public_id', email);
+            formData.append('api_key', process.env.REACT_APP_CLOUDINARY_API_KEY);
+
+            const { data } = await axios.post(
+                `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    }
+                }
+            );
+
+            return data.secure_url;
+
+        } catch (error) {
+            console.error('Error uploading profile picture:', error);
+            throw error;
+        }
+    }
+
     const registerMutation = useMutation({
         mutationFn: async (values) => {
             try {
-                const formData = new FormData();
-                formData.append('name', values.name);
-                formData.append('email', values.email);
-                formData.append('password', values.password);
-                formData.append('profilePic', profilePic);
+                const { name, email, password, profilePic } = values;
 
-                const { data } = await axios.post('http://localhost:3000/auth/register', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
+                // Upload profile picture to Cloudinary
+                const secure_url = await uploadProfilePic(profilePic, email);
+
+                const { data } = await axios.post('http://localhost:3000/auth/register', {
+                    name,
+                    email,
+                    password,
+                    profilePicture: secure_url
                 });
                 toast.success('Registration successful');
                 return data;
@@ -44,7 +67,8 @@ export default function Register() {
         },
         onSuccess: (data) => {
             localStorage.setItem('token', data.token);
-            localStorage.setItem('name', JSON.stringify(data.user.name));
+            localStorage.setItem('user', JSON.stringify(data.user));
+            navigate('/');
         }
     });
 
@@ -74,7 +98,7 @@ export default function Register() {
     };
 
     return (
-        <QueryClientProvider client={queryClient}>
+        <>
             {isLogin ? (
                 <div className='container'>
                     <h1 className='heading'>Login</h1>
@@ -147,7 +171,7 @@ export default function Register() {
                     <p>Already have an account? <span onClick={() => setIsLogin(!isLogin)}>Login</span></p>
                 </div>
             )}
-            <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
+        </>
+
     );
 }
